@@ -1,0 +1,31 @@
+<div class="orders-container">
+  <a routerLink="/" class="back-link">← На главную</a>
+  
+  <h2>Заказы</h2>
+
+  <div *ngIf="loading" class="loading">Загрузка заказов...</div>
+
+  <div *ngIf="!loading && orders.length === 0" class="no-orders">
+    У вас пока нет заказов. <a routerLink="/">Перейти к покупкам</a>
+  </div>
+
+  <div *ngFor="let order of orders" class="order-card">
+    <div class="order-header">
+      <span class="order-id">Заказ #{{ order.id }}</span>
+      <span class="order-date">{{ order.created_at | date:'dd.MM.yyyy HH:mm' }}</span>
+      <span class="order-status" [class.status-new]="order.status === 'NEW'">
+        {{ order.status }}
+      </span>
+      <span class="order-total">{{ order.total_amount }} ₽</span>
+    </div>
+
+    <div class="order-items">
+      <div *ngFor="let item of order.items" class="order-item">
+        <span>{{ item.product_name }}</span>
+        <span>{{ item.quantity }} шт.</span>
+        <span>{{ item.purchase_price }} ₽/шт.</span>
+        <span>Итого: {{ item.quantity * item.purchase_price }} ₽</span>
+      </div>
+    </div>
+  </div>
+</div>

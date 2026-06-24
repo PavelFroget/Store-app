@@ -1,0 +1,20 @@
+<div class="slider-container"
+     (mouseenter)="pauseAutoPlay()"
+     (mouseleave)="resumeAutoPlay()">
+  
+  <div class="slider-track" [style.transform]="'translateX(-' + (currentIndex * 100) + '%)'">
+    <div class="slide" *ngFor="let img of images">
+      <img [src]="img" alt="Баннер" />
+    </div>
+  </div>
+
+  <button class="slider-btn prev" (click)="prev()">❮</button>
+  <button class="slider-btn next" (click)="next()">❯</button>
+
+  <div class="dots">
+    <span class="dot"
+          *ngFor="let img of images; let i = index"
+          [class.active]="i === currentIndex"
+          (click)="goTo(i)"></span>
+  </div>
+</div>

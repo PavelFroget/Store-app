@@ -1,0 +1,41 @@
+
+<header class="header">
+  <h1>Строй<span>Материалы</span></h1>
+  <div class="header-right">
+
+    <span *ngIf="isLoggedIn" class="user-name">
+        {{ userName }}
+        <button class="auth-btn logout logout-btn" (click)="logout()"> Выйти</button>
+    </span>
+
+    <button *ngIf="isLoggedIn" class="orders-btn" (click)="goToOrders()"> Заказы</button>
+
+    <button *ngIf="!isLoggedIn" class="auth-btn" (click)="goToLogin()"> Войти</button>
+  
+    <button class="cart-btn" (click)="toggleCart()">
+        Корзина ({{ cartItemsCount }})
+    </button>
+  </div>
+</header>
+
+<div class="container">
+  <router-outlet></router-outlet>
+</div>
+
+<div class="cart-overlay" [class.active]="cartVisible" (click)="toggleCart()"></div>
+<div class="cart-panel" [class.active]="cartVisible">
+  <button class="close-btn" (click)="toggleCart()">✕</button>
+  <h2>Корзина</h2>
+  <div *ngIf="cartItems.length === 0" class="empty-cart">Корзина пуста</div>
+  <div *ngFor="let item of cartItems" class="cart-item">
+    <span class="item-name">{{ item.name }}</span>
+    <span class="item-price">{{ item.quantity }} × {{ item.price }} ₽</span>
+    <button class="item-remove" (click)="removeFromCart(item.id)">✕</button>
+  </div>
+  <div class="cart-total" *ngIf="cartItems.length > 0">
+    Итого: <span>{{ getTotal() }} ₽</span>
+  </div>
+  <button class="cart-checkout" *ngIf="cartItems.length > 0" (click)="checkout()">
+    Оформить заказ
+  </button>
+</div>

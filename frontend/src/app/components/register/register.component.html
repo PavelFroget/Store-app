@@ -1,0 +1,52 @@
+<div class="register-container">
+  <div class="register-card">
+    <a routerLink="/" class="back-link">← На главную</a>
+    <h2>Регистрация</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Имя</label>
+        <input
+          type="text"
+          [(ngModel)]="name"
+          name="name"
+          placeholder="Введите ваше имя"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="Введите email"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label>Пароль</label>
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Введите пароль"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label>Подтвердите пароль</label>
+        <input
+          type="password"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          placeholder="Введите пароль ещё раз"
+          required
+        />
+      </div>
+      <div *ngIf="error" class="error">{{ error }}</div>
+      <div *ngIf="success" class="success">{{ success }}</div>
+      <button type="submit" class="btn-register">Зарегистрироваться</button>
+    </form>
+    <p class="hint">Уже есть аккаунт? <a routerLink="/login">Войдите</a></p>
+  </div>
+</div>
