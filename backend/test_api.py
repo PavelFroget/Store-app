@@ -1,11 +1,8 @@
-from fastapi.testclient import TestClient
 from main import app
 from database import SessionLocal
 from sqlalchemy import text
 
-client = TestClient(app)
-
-def get_auth_token(email: str = "test@example.com", password: str = "123456"):
+def get_auth_token(client, email="test@example.com", password="123456"):
     client.post("/register", json={
         "name": "Test User",
         "email": email,
@@ -27,7 +24,7 @@ def get_auth_token(email: str = "test@example.com", password: str = "123456"):
 #    db.close()
 
 # Регистрация нового пользователя
-def test_register():
+def test_register(client):
     #clean_db()
     response = client.post("/register", json={
         "name": "Alice",
@@ -38,7 +35,7 @@ def test_register():
     assert "user_id" in response.json()
 
 # Попытка зарегистрироваться с уже существующим email
-def test_register_dupl_email():
+def test_register_dupl_email(client):
     #clean_db()
     client.post("/register", json={
         "name": "Bob",
@@ -54,7 +51,7 @@ def test_register_dupl_email():
     assert "Email already registered" in response.text
 
 # Вход с правильными данными
-def test_login():
+def test_login(client):
     #clean_db()
     email = "login@example.com"
     password = "mypassword"
@@ -71,7 +68,7 @@ def test_login():
     assert "access_token" in response.json()
 
 # Вход с неверным паролем
-def test_login_password():
+def test_login_password(client):
     #clean_db()
     email = "wrong@example.com"
     password = "correct"
@@ -88,20 +85,20 @@ def test_login_password():
     assert "Неверный пароль" in response.text
 
 # Получение списка товаров без авторизации
-def test_get_products():
+def test_get_products(client):
     response = client.get("/products")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 # Попытка создать заказ без токена
-def test_create_order():
+def test_create_order(client):
     response = client.post("/orders", json={"items": []})
     assert response.status_code == 401
 
 # Получение данных текущего пользователя по JWT-токену
-def test_get_user():
+def test_get_user(client):
     #clean_db()
-    token = get_auth_token("me@example.com", "secret")
+    token = get_auth_token(client, "me@example.com", "secret")
     headers = {"Authorization": f"Bearer {token}"}
     response = client.get("/users/me", headers=headers)
     assert response.status_code == 200
